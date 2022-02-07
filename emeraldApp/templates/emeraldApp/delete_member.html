@@ -1,0 +1,13 @@
+{% extends 'emeraldApp/main.html' %}
+{% load static %}
+{% block content %}
+
+<p>Are you sure you want to delete "{{item}}"</p>
+
+<form action="{% url 'delete_member' item.id %}" method="POST">
+    {% csrf_token %}
+    <a href="{% url 'members' %}">Cancel</a>
+    <input type="submit" name="Confirm">
+</form>
+
+{% endblock %}
