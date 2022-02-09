@@ -3,7 +3,10 @@
 {% block content %}
 
 <h1 class="text-blue-500 text-2xl md:text-3xl lg:text-4xl font-bold p-4">Clubs</h1>
-
+<a href="{% url 'create_club' %}"><button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+        Add Club
+    </button></a>
 <!-- <table>
     <tr>
         <th>Club Name</th>
@@ -19,6 +22,7 @@
     {% endfor %}
     <h2>Total clubs: {{total_clubs}}</h2>
 </table> -->
+
 
 <!-- START -->
 <!-- This example requires Tailwind CSS v2.0+ -->

@@ -2,7 +2,13 @@
 
 {% block content %}
 
-<h1>Events</h1>
+<h1 class="text-blue-500 text-2xl md:text-3xl lg:text-4xl font-bold p-4">Events</h1>
+
+<a href="{% url 'create_event' %}"><button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+        Add Event
+    </button></a>
+
 
 <!-- <table>
     <tr>
