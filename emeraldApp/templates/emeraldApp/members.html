@@ -30,7 +30,13 @@
     {% endfor %}
 </table> -->
 
-<h2>Total members in IWDC: {{total_IWDC_members}}</h2>
+<!-- <h2>Total members in IWDC: {{total_IWDC_members}}</h2> -->
+
+<form method="get">
+    {{myFilter.form}}
+    <button type="submit"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">Search</button>
+</form>
 
 <!-- START -->
 <!-- This example requires Tailwind CSS v2.0+ -->

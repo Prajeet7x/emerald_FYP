@@ -2,6 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from .models import *
 from .forms import *
+from .filters import MemberFilter, EventFilter
+
+from django.contrib.auth import authenticate, login, logout
+
+from django.contrib import messages
 
 # Create your views here.
 
@@ -28,14 +33,20 @@ def member(request):
         club__name__contains='CyberOps Club').count()
     total_CyberDefenders_members = members.filter(
         club__name__contains='Cyber Defenders Club').count()
+
+    myFilter = MemberFilter(request.GET, queryset=members)
+    members = myFilter.qs
+
     context = {'members': members, 'total_members': total_members,
-               'total_IWDC_members': total_IWDC_members, 'total_CyberOps_members': total_CyberOps_members, 'total_CyberDefenders_members': total_CyberDefenders_members, 'customer': member}
+               'total_IWDC_members': total_IWDC_members, 'total_CyberOps_members': total_CyberOps_members, 'total_CyberDefenders_members': total_CyberDefenders_members, 'customer': member, 'myFilter': myFilter}
     return render(request, 'emeraldApp/members.html', context)
 
 
 def events(request):
     events = Event.objects.all()
-    return render(request, 'emeraldApp/events.html', {'events': events})
+    myFilter = EventFilter(request.GET, queryset=events)
+    events = myFilter.qs
+    return render(request, 'emeraldApp/events.html', {'events': events, 'myFilter': myFilter})
 
 
 def memberProfile(request, pk_test):
@@ -162,12 +173,32 @@ def deleteClub(request, pk):
 
 
 def registerPage(request):
-    form = UserCreationForm()
+    form = CreateUserForm(request.POST)
+
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            user = form.cleaned_data.get('username')
+            messages.success(request, 'Account was created for ' + user)
+            return redirect('login')
+
     context = {'form': form}
     return render(request, 'emeraldApp/register.html', context)
 
 
 def loginPage(request):
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return(redirect('home'))
+
     context = {}
     return render(request, 'emeraldApp/login.html', context)
 
