@@ -11,6 +11,8 @@ urlpatterns = [
     path('events/', views.events, name="events"),
     path('register/', views.registerPage, name="register"),
     path('login/', views.loginPage, name="login"),
+    path('logout/', views.logoutUser, name="logout"),
+
 
     # Paths for Event CRUD
     path('create_event/', views.createEvent, name="create_event"),

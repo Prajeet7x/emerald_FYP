@@ -8,11 +8,14 @@ from django.contrib.auth import authenticate, login, logout
 
 from django.contrib import messages
 
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 
 from .models import *
 
 
+@login_required(login_url='login')
 def home(request):
     return render(request, 'emeraldApp/dashboard.html')
 
@@ -173,18 +176,21 @@ def deleteClub(request, pk):
 
 
 def registerPage(request):
-    form = CreateUserForm(request.POST)
-
-    if request.method == 'POST':
+    if request.user.is_authenticated:
+        return redirect('home')
+    else:
         form = CreateUserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            user = form.cleaned_data.get('username')
-            messages.success(request, 'Account was created for ' + user)
-            return redirect('login')
 
-    context = {'form': form}
-    return render(request, 'emeraldApp/register.html', context)
+        if request.method == 'POST':
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                form.save()
+                user = form.cleaned_data.get('username')
+                messages.success(request, 'Account was created for ' + user)
+                return redirect('login')
+
+        context = {'form': form}
+        return render(request, 'emeraldApp/register.html', context)
 
 
 def loginPage(request):
@@ -197,11 +203,14 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
-            return(redirect('home'))
+            return redirect('home')
+        else:
+            messages.info(request, 'Username or Password is incorrect')
 
     context = {}
     return render(request, 'emeraldApp/login.html', context)
 
-# def logoutUser(request):
-# 	logout(request)
-# 	return redirect('login')
+
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
