@@ -1,8 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
+
+from django.contrib.auth.models import Group
+
+from emeraldApp.decorators import unauthenticated_user
 from .models import *
 from .forms import *
 from .filters import MemberFilter, EventFilter
+from .decorators import unauthenticated_user, allowed_users, admin_only
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -16,10 +21,12 @@ from .models import *
 
 
 @login_required(login_url='login')
+@admin_only
 def home(request):
     return render(request, 'emeraldApp/dashboard.html')
 
 
+@login_required(login_url='login')
 def clubs(request):
     clubs = Club.objects.all()
     total_clubs = clubs.count()
@@ -27,6 +34,7 @@ def clubs(request):
     return render(request, 'emeraldApp/clubs.html', context)
 
 
+@login_required(login_url='login')
 def member(request):
     members = Member.objects.all()
     total_members = members.count()
@@ -61,6 +69,8 @@ def memberProfile(request, pk_test):
 # Functions for Event CRUD
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def createEvent(request):
     form = EventForm()
 
@@ -74,6 +84,8 @@ def createEvent(request):
     return render(request, 'emeraldApp/form.html', context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def updateEvent(request, pk):
 
     event = Event.objects.get(id=pk)
@@ -89,6 +101,8 @@ def updateEvent(request, pk):
     return render(request, 'emeraldApp/form.html', context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def deleteEvent(request, pk):
     event = Event.objects.get(id=pk)
     if request.method == "POST":
@@ -100,6 +114,8 @@ def deleteEvent(request, pk):
 # Functions for Member CRUD
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def createMember(request):
     form = MemberForm()
 
@@ -113,6 +129,8 @@ def createMember(request):
     return render(request, 'emeraldApp/form.html', context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def updateMember(request, pk):
 
     member = Member.objects.get(id=pk)
@@ -127,6 +145,8 @@ def updateMember(request, pk):
     return render(request, 'emeraldApp/form.html', context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def deleteMember(request, pk):
     member = Member.objects.get(id=pk)
     if request.method == "POST":
@@ -138,6 +158,8 @@ def deleteMember(request, pk):
 # Functions for Club CRUD
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def createClub(request):
     form = ClubForm()
 
@@ -150,6 +172,8 @@ def createClub(request):
     return render(request, 'emeraldApp/form.html', context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def updateClub(request, pk):
 
     club = Club.objects.get(id=pk)
@@ -164,6 +188,8 @@ def updateClub(request, pk):
     return render(request, 'emeraldApp/form.html', context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def deleteClub(request, pk):
     club = Club.objects.get(id=pk)
     if request.method == "POST":
@@ -175,24 +201,30 @@ def deleteClub(request, pk):
 # Register and Login functions
 
 
+@unauthenticated_user
 def registerPage(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    else:
+
+    form = CreateUserForm()
+
+    if request.method == 'POST':
         form = CreateUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get('username')
 
-        if request.method == 'POST':
-            form = CreateUserForm(request.POST)
-            if form.is_valid():
-                form.save()
-                user = form.cleaned_data.get('username')
-                messages.success(request, 'Account was created for ' + user)
-                return redirect('login')
+            group = Group.objects.get(name='member')
+            user.groups.add(group)
 
-        context = {'form': form}
-        return render(request, 'emeraldApp/register.html', context)
+            messages.success(
+                request, 'Account was created for ' + username)
+
+            return redirect('login')
+
+    context = {'form': form}
+    return render(request, 'emeraldApp/register.html', context)
 
 
+@unauthenticated_user
 def loginPage(request):
 
     if request.method == 'POST':
@@ -214,3 +246,8 @@ def loginPage(request):
 def logoutUser(request):
     logout(request)
     return redirect('login')
+
+
+def userPage(request):
+    context = {}
+    return render(request, 'emeraldApp/user/html', context)
