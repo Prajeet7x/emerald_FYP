@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from sqlalchemy import null
 
 # Create your models here.
@@ -45,6 +46,9 @@ class Member(models.Model):
         ('Networking', 'Networking'),
         ('Multimedia', 'Multimedia'),
     )
+
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
+
     name = models.CharField(max_length=50, null=True)
     gender = models.CharField(max_length=20, null=True, choices=GENDER)
     phone = models.CharField(max_length=20, null=True)

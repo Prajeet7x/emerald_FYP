@@ -1,38 +1,5 @@
 {% extends 'emeraldApp/main.html' %} {% block content %}
 
-<h1 class="text-blue-500 text-2xl md:text-3xl lg:text-4xl font-bold p-4">
-  Members
-</h1>
-<a href="{% url 'create_member' %}"
-  ><button
-    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-  >
-    Add Member
-  </button></a
->
-
-{% comment %} {% for member in members %}
-
-<tr>
-  <td><a href="{% url 'member_profile' member.id %}">View</a></td>
-  <td>{{member.name}}</td>
-  <td>{{member.phone}}</td>
-</tr>
-
-{% endfor %} {% endcomment %}
-
-<!-- <h2>Total members in IWDC: {{total_IWDC_members}}</h2> -->
-
-<form method="get">
-  {{myFilter.form}}
-  <button
-    type="submit"
-    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-  >
-    Search
-  </button>
-</form>
-
 <!-- START -->
 <!-- This example requires Tailwind CSS v2.0+ -->
 <div class="flex flex-col">
@@ -80,6 +47,7 @@
               >
                 Year
               </th>
+              {% comment %}
               <th
                 scope="col"
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -92,11 +60,12 @@
               >
                 Edit
               </th>
+              {% endcomment %}
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
             <!-- For loop START -->
-            {% for member in members %}
+            {% for member in total_IWDC_members %}
             <tr>
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
@@ -145,13 +114,6 @@
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 <a
-                  href="{% url 'member_profile' member.id %}"
-                  class="text-indigo-600 hover:text-indigo-900"
-                  >View</a
-                >
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                <a
                   href="{% url 'update_member' member.id %}"
                   class="text-indigo-600 hover:text-indigo-900"
                   >Update</a
@@ -179,5 +141,4 @@
 </div>
 
 <!-- END  -->
-
 {% endblock %}

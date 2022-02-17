@@ -37,11 +37,15 @@ def clubs(request):
 @login_required(login_url='login')
 def member(request):
     members = Member.objects.all()
-    total_members = members.count()
+    total_members = members.count
+    ()
+    # Total number of IWDC members
     total_IWDC_members = members.filter(
-        club__name__contains='Islington Web Development Club').count()
+        club__name__contains='Islington Web Development Club')
+    # Total number of CyberOps members
     total_CyberOps_members = members.filter(
         club__name__contains='CyberOps Club').count()
+    # Total number of CyberDefenders members
     total_CyberDefenders_members = members.filter(
         club__name__contains='Cyber Defenders Club').count()
 
@@ -60,6 +64,7 @@ def events(request):
     return render(request, 'emeraldApp/events.html', {'events': events, 'myFilter': myFilter})
 
 
+@login_required(login_url='login')
 def memberProfile(request, pk_test):
     member = Member.objects.get(id=pk_test)
 
@@ -186,6 +191,14 @@ def updateClub(request, pk):
             return redirect('/clubs')
     context = {'form': form}
     return render(request, 'emeraldApp/form.html', context)
+
+
+@login_required(login_url='login')
+def viewMembers(request, pk):
+    club = Club.objects.get(id=pk)
+
+    context = {'club': club}
+    return render(request, 'emeraldApp/IWDC_members.html', context)
 
 
 @login_required(login_url='login')
