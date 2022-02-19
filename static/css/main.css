@@ -1,3 +1,7 @@
 input {
   border: solid 0.2px grey;
 }
+
+/* a:is(:link, :active, :visited).active {
+  color: blue;
+} */

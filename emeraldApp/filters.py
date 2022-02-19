@@ -12,7 +12,7 @@ class MemberFilter(django_filters.FilterSet):
     class Meta:
         model = Member
         fields = '__all__'
-        exclude = ['date_created']
+        exclude = ['date_created', 'profile_pic']
 
 
 class EventFilter(django_filters.FilterSet):

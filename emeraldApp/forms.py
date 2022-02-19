@@ -17,6 +17,13 @@ class MemberForm(ModelForm):
         fields = '__all__'
 
 
+class MemberProfileForm(ModelForm):
+    class Meta:
+        model = Member
+        fields = '__all__'
+        exclude = ['user']
+
+
 class ClubForm(ModelForm):
     class Meta:
         model = Club

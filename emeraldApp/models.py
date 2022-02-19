@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from sqlalchemy import null
+from sqlalchemy import null, true
 
 # Create your models here.
 
@@ -59,6 +59,8 @@ class Member(models.Model):
     collegeEmail = models.CharField(max_length=50, null=True)
     personalEmail = models.CharField(max_length=50, null=True)
     year = models.CharField(max_length=10, null=True, choices=yearChoices)
+    profile_pic = models.ImageField(
+        default="default_profile.jpg",  null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):

@@ -57,6 +57,7 @@ def member(request):
     return render(request, 'emeraldApp/members.html', context)
 
 
+@login_required(login_url='login')
 def events(request):
     events = Event.objects.all()
     myFilter = EventFilter(request.GET, queryset=events)
@@ -70,6 +71,14 @@ def memberProfile(request, pk_test):
 
     context = {'member': member}
     return render(request, 'emeraldApp/memberProfile.html', context)
+
+
+@login_required(login_url='login')
+def clubProfile(request, pk_test):
+    club = Club.objects.get(id=pk_test)
+
+    context = {'club': club}
+    return render(request, 'emeraldApp/club_profile.html', context)
 
 # Functions for Event CRUD
 
@@ -211,6 +220,21 @@ def deleteClub(request, pk):
     context = {'item': club}
     return render(request, 'emeraldApp/delete_club.html', context)
 
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['member', 'superuser'])
+def accountSettings(request):
+    member = request.user.member
+    form = MemberProfileForm(instance=member)
+
+    if request.method == "POST":
+        form = MemberProfileForm(request.POST, request.FILES, instance=member)
+        if form.is_valid():
+            form.save()
+
+    context = {'form': form}
+    return render(request, 'emeraldApp/account_settings.html', context)
+
 # Register and Login functions
 
 
@@ -227,6 +251,10 @@ def registerPage(request):
 
             group = Group.objects.get(name='member')
             user.groups.add(group)
+            Member.objects.create(
+                user=user,
+                name=user.username
+            )
 
             messages.success(
                 request, 'Account was created for ' + username)
@@ -261,6 +289,8 @@ def logoutUser(request):
     return redirect('login')
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['member'])
 def userPage(request):
     context = {}
-    return render(request, 'emeraldApp/user/html', context)
+    return render(request, 'emeraldApp/user.html', context)

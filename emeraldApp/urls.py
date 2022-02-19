@@ -4,6 +4,8 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name="home"),
+    path('club_profile/<str:pk_test>',
+         views.clubProfile, name='club_profile'),
     path('clubs/', views.clubs, name="clubs"),
     path('member_profile/<str:pk_test>',
          views.memberProfile, name='member_profile'),
@@ -16,6 +18,8 @@ urlpatterns = [
 
     path('view_members/<str:pk>',
          views.viewMembers, name="view_members"),
+
+    path('account/', views.accountSettings, name="account"),
 
     # Paths for Event CRUD
     path('create_event/', views.createEvent, name="create_event"),
