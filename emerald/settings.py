@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'emeraldApp',
     'django_filters',
     'widget_tweaks',
+    'import_export',
 ]
 
 MIDDLEWARE = [

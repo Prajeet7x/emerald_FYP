@@ -18,6 +18,9 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 from .models import *
+from .resources import MemberResource
+from tablib import Dataset
+from django.http import HttpResponse
 
 
 @login_required(login_url='login')
@@ -71,6 +74,14 @@ def memberProfile(request, pk_test):
 
     context = {'member': member}
     return render(request, 'emeraldApp/memberProfile.html', context)
+
+
+@login_required(login_url='login')
+def eventDetails(request, pk_test):
+    event = Event.objects.get(id=pk_test)
+
+    context = {'event': event}
+    return render(request, 'emeraldApp/eventDetails.html', context)
 
 
 @login_required(login_url='login')
@@ -294,3 +305,39 @@ def logoutUser(request):
 def userPage(request):
     context = {}
     return render(request, 'emeraldApp/user.html', context)
+
+
+def simple_upload(request):
+    if request.method == 'POST':
+        member_resource = MemberResource()
+        dataset = Dataset()
+        new_member = request.FILES['myfile']
+
+        if not new_member.name.endswith('xlsx'):
+            messages.info(request, 'wrong format')
+            return render(request, 'upload.html')
+
+        imported_data = dataset.load(new_member.read(), format='xlsx')
+        for data in imported_data:
+            value = EventParticipants(
+                data[0],
+                data[1],
+                data[2],
+                data[3],
+                data[4]
+            )
+            value.save()
+    return render(request, 'emeraldApp/upload.html')
+
+    '''value = Member(
+                data[0],
+                data[1],
+                data[2],
+                data[3],
+                data[4],
+                data[5],
+                data[6],
+                data[7],
+                data[8],
+                data[9],
+            )'''

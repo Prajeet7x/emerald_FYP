@@ -9,6 +9,7 @@ urlpatterns = [
     path('clubs/', views.clubs, name="clubs"),
     path('member_profile/<str:pk_test>',
          views.memberProfile, name='member_profile'),
+    path('eventDetails/<str:pk_test>', views.eventDetails, name="event_details"),
     path('members/', views.member, name="members"),
     path('events/', views.events, name="events"),
     path('register/', views.registerPage, name="register"),
@@ -37,4 +38,6 @@ urlpatterns = [
     path('delete_club/<str:pk>', views.deleteClub, name="delete_club"),
 
     # path('logout/', views.logoutUser, name="logout"),
+
+    path('upload/', views.simple_upload, name="upload"),
 ]
