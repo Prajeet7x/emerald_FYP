@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
-
 from django.contrib.auth.models import Group
 
 from emeraldApp.decorators import unauthenticated_user
@@ -20,7 +19,7 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 from .resources import MemberResource
 from tablib import Dataset
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 
 @login_required(login_url='login')
@@ -79,8 +78,8 @@ def memberProfile(request, pk_test):
 @login_required(login_url='login')
 def eventDetails(request, pk_test):
     event = Event.objects.get(id=pk_test)
-
-    context = {'event': event}
+    allMembers = EventParticipants.objects.all()
+    context = {'event': event, 'allMembers': allMembers}
     return render(request, 'emeraldApp/eventDetails.html', context)
 
 
@@ -341,3 +340,10 @@ def simple_upload(request):
                 data[8],
                 data[9],
             )'''
+
+
+def eventjson(request):
+    event = Event
+
+    dict_obj = model_to_dict(event)
+    return JsonResponse("Hello World", safe=False)

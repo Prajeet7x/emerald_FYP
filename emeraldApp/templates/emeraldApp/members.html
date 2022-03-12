@@ -1,4 +1,6 @@
-{% extends 'emeraldApp/main.html' %} {% block content %}
+{% extends 'emeraldApp/main.html' %}
+{% load widget_tweaks %}
+{% block content %}
 
 <h1 class="text-blue-500 text-2xl md:text-3xl lg:text-4xl font-bold p-4">
   Members
@@ -21,7 +23,7 @@
 <!-- <h2>Total members in IWDC: {{total_IWDC_members}}</h2> -->
 
 <form method="get">
-  {{myFilter.form}}
+  {{myFilter.form }}
   <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
     Search
   </button>

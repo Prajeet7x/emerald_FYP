@@ -40,4 +40,8 @@ urlpatterns = [
     # path('logout/', views.logoutUser, name="logout"),
 
     path('upload/', views.simple_upload, name="upload"),
+    path('api/event', views.eventjson, name="event-json"),
+
+
 ]
+
