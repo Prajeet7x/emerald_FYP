@@ -115,3 +115,16 @@ class EventParticipants(models.Model):
 
     def __str__(self):
         return self.name
+
+class Feedback(models.Model):
+    content = models.TextField(max_length=300, null=True)
+    name = models.CharField(max_length=40, null=True)
+
+    def __str__(self):
+        return self.name
+
+class Announcement(models.Model):
+    content = models.TextField(max_length=300, null=True)
+    picture = models.ImageField(
+        default="default_profile.jpg",  null=True, blank=True)
+    

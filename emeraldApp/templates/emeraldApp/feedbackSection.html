@@ -1,0 +1,18 @@
+{% extends 'emeraldApp/main.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<table>
+<tr>
+    <th>Feedback</th>
+    <th>From</th>
+</tr>
+{% for feedback in feedbackContent %}
+<tr>
+    <td>{{ feedback.content }}</td>
+    <td></td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

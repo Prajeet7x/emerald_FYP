@@ -1,3 +1,4 @@
+from django.forms import model_to_dict
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Group
@@ -14,12 +15,12 @@ from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
-
 from .models import *
 from .resources import MemberResource
 from tablib import Dataset
 from django.http import HttpResponse, JsonResponse
+
+from django.core.serializers import serialize
 
 
 @login_required(login_url='login')
@@ -328,22 +329,21 @@ def simple_upload(request):
             value.save()
     return render(request, 'emeraldApp/upload.html')
 
-    '''value = Member(
-                data[0],
-                data[1],
-                data[2],
-                data[3],
-                data[4],
-                data[5],
-                data[6],
-                data[7],
-                data[8],
-                data[9],
-            )'''
-
 
 def eventjson(request):
-    event = Event
-
+    event = Event.objects.all()
+    data = serialize("json", [event], fields=('name','timing'))
     dict_obj = model_to_dict(event)
-    return JsonResponse("Hello World", safe=False)
+    return JsonResponse(data, safe=False)
+
+@login_required(login_url='login')
+def feedback(request):
+    feedbackContent = Feedback.objects.all()
+    context = {'feedbackContent':feedbackContent}
+    return render(request, 'emeraldApp/feedbackSection.html', context)
+
+@login_required(login_url='login')
+def announcement(request):
+    announcements = Announcement.objects.all()
+    context = {'announcements':announcements}
+    return render(request, 'emeraldApp/announcements.html', context)

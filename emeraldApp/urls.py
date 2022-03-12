@@ -41,6 +41,7 @@ urlpatterns = [
 
     path('upload/', views.simple_upload, name="upload"),
     path('api/event', views.eventjson, name="event-json"),
+    path('announcement/', views.announcement, name="announcement"),
 
 
 ]
