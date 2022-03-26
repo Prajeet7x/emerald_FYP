@@ -5,15 +5,7 @@
 {% block content %}
 
 <section>
-<div>
-    {% for announcement in announcement %}
-    <div>{{announcement.content}}</div>
-        <div class="image overflow-hidden">
-            <img class="h-auto w-full mx-auto" style="width:10rem;height:10rem;" src="{{announcement.picture.url}}" alt="Profile photo" />
-        </div>
-    </div>
-    {% endfor %}
-    <!-- {% for announcement in IWDCAnn %}
+    {% for announcement in announcements %}
     <div>
         <div>{{announcement.content}}</div>
         <div class="image overflow-hidden">
@@ -21,51 +13,6 @@
           </div>
     </div>
     {% endfor %}
-
-    {% for announcement in AIAnn %}
-    <div>
-        <div>{{announcement.content}}</div>
-        <div class="image overflow-hidden">
-            <img class="h-auto w-full mx-auto" style="width:10rem;height:10rem;" src="{{announcement.picture.url}}" alt="Profile photo" />
-          </div>
-    </div>
-    {% endfor %}
-
-    {% for announcement in CDAnn %}
-    <div>
-        <div>{{announcement.content}}</div>
-        <div class="image overflow-hidden">
-            <img class="h-auto w-full mx-auto" style="width:10rem;height:10rem;" src="{{announcement.picture.url}}" alt="Profile photo" />
-          </div>
-    </div>
-    {% endfor %}
-
-    {% for announcement in CDAnn %}
-    <div>
-        <div>{{announcement.content}}</div>
-        <div class="image overflow-hidden">
-            <img class="h-auto w-full mx-auto" style="width:10rem;height:10rem;" src="{{announcement.picture.url}}" alt="Profile photo" />
-          </div>
-    </div>
-    {% endfor %}
-
-    {% for announcement in COAnn %}
-    <div>
-        <div>{{announcement.content}}</div>
-        <div class="image overflow-hidden">
-            <img class="h-auto w-full mx-auto" style="width:10rem;height:10rem;" src="{{announcement.picture.url}}" alt="Profile photo" />
-          </div>
-    </div>
-    {% endfor %}
-
-    {% for announcement in MCAnn %}
-    <div>
-        <div>{{announcement.content}}</div>
-        <div class="image overflow-hidden">
-            <img class="h-auto w-full mx-auto" style="width:10rem;height:10rem;" src="{{announcement.picture.url}}" alt="Profile photo" />
-          </div>
-    </div>
-    {% endfor %} -->
 </section>
 
 {% endblock %}

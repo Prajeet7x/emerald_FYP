@@ -22,12 +22,6 @@ from django.http import HttpResponse, JsonResponse
 
 from django.core.serializers import serialize
 
-from django import template
-from django.contrib.auth.models import Group
-
-register = template.Library()
-
-
 
 @login_required(login_url='login')
 @admin_only
@@ -348,35 +342,8 @@ def feedback(request):
     context = {'feedbackContent':feedbackContent}
     return render(request, 'emeraldApp/feedbackSection.html', context)
 
-@register.filter(name='has_group')
-def has_group(user, group_name):
-    group = Group.objects.get(name=group_name)
-    return True if group in user.groups.all() else False
-
 @login_required(login_url='login')
 def announcement(request):
-
-    user = request.user
-    print("logged in user is ",user)
-    user_club = user.member
-    print("Member club is ",user_club)
-
-
-
-    # announcements = Announcement.objects.all()
-    # # Total IWDC announcements
-    # IWDCannouncements = announcements.filter(club__name__contains="Islington Web Development Club")
-    # # Total AI Club announcements
-    # AIannouncements = announcements.filter(club__name__contains="Islington AI Club")
-    # # Total Cyber Defenders announcements
-    # cyberDefendersAnnouncements = announcements.filter(club__name__contains="Cyber Defenders Club")
-    # # Total Cyber Ops announcements
-    # cyberOpsAnnouncements = announcements.filter(club__name__contains="Cyber Ops Club")
-    # # Total Multimedia announcements
-    # multimediaAnnouncements = announcements.filter(club__name__contains="Multimedia Club")
-
-    # user = request.user
-    # club = Club.objects.filter(member=user.user_member)
-    # announcement = Announcement.objects.filter(club=club)
-    # context = {'announcements':announcements, 'IWDCAnn':IWDCannouncements, 'AIAnn':AIannouncements, 'CDAnn':cyberDefendersAnnouncements, 'COAnn':cyberOpsAnnouncements, 'MCAnn':multimediaAnnouncements, 'announcement':announcement}
-    return render(request, 'emeraldApp/announcements.html')
+    announcements = Announcement.objects.all()
+    context = {'announcements':announcements}
+    return render(request, 'emeraldApp/announcements.html', context)
