@@ -1,3 +1,4 @@
+from calendar import c
 from django.db import models
 from django.contrib.auth.models import User
 from sqlalchemy import null, true
@@ -47,7 +48,7 @@ class Member(models.Model):
         ('Multimedia', 'Multimedia'),
     )
 
-    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE, related_name='user_member')
 
     name = models.CharField(max_length=50, null=True)
     gender = models.CharField(max_length=20, null=True, choices=GENDER)
@@ -125,6 +126,7 @@ class Feedback(models.Model):
 
 class Announcement(models.Model):
     content = models.TextField(max_length=300, null=True)
+    club = models.ForeignKey(Club, null=True, on_delete=models.SET_NULL)
     picture = models.ImageField(
         default="default_profile.jpg",  null=True, blank=True)
     
